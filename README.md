@@ -7,6 +7,69 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Pasos para clonar y ejecutar este proyecto
+
+Sigue estos pasos para clonar y poner en marcha el proyecto en tu entorno local:
+
+1. **Clona el repositorio**
+    ```bash
+    git clone https://github.com/tu-usuario/tu-repositorio.git
+    cd tu-repositorio
+    ```
+
+2. **Instala las dependencias**
+    ```bash
+    composer install
+    ```
+
+3. **Copia el archivo de entorno y configura tus variables**
+    ```bash
+    cp .env.example .env
+    ```
+    Edita el archivo `.env` con tus credenciales de base de datos y otras variables necesarias.
+
+4. **Genera la clave de la aplicación**
+    ```bash
+    php artisan key:generate
+    ```
+
+5. **Ejecuta las migraciones**
+    ```bash
+    php artisan migrate
+    ```
+
+6. **(Opcional) Pobla la base de datos con datos de prueba**
+    ```bash
+    php artisan db:seed
+    ```
+
+7. **Instala Laravel Passport**
+        ```bash
+        php artisan passport:install
+        ```
+        recuerda buscar los archivos oauth-private.key y oauth-public.key en el directorio storage/oauth y copiarlos al archivo .env de tu proyecto.
+        Esto generará las claves necesarias para la autenticación API.
+
+8. **Inicia el servidor de desarrollo**
+        ```bash
+        php artisan serve
+        ```
+        El proyecto estará disponible en [http://localhost:8000](http://localhost:8000).
+
+9. **Inicia el servidor de desarrollo**
+    ```bash
+    php artisan serve
+    ```
+    El proyecto estará disponible en [http://localhost:8000](http://localhost:8000).
+
+---
+
+## Autoria
+
+Desarrollado por **Juan Reyes**.
+
+---
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
@@ -59,3 +122,4 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\PrecioProducto;
 use App\Models\Producto;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -29,6 +30,7 @@ class DatabaseSeeder extends Seeder
         if (env('DATA_DUMMY') == 'true') {
             User::factory()->count(10)->create();
             Producto::factory()->count(20)->create();
+            PrecioProducto::factory()->count(6)->create();
         }
     }
 }

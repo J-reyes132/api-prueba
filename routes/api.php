@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DivisaController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PrecioProductoController;
 use App\Http\Controllers\ProductoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,15 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/producto/{producto}/update', 'update');
         Route::delete('/producto/{producto}/delete', 'destroy');
         Route::post('/producto/{producto}/toggle', 'toggle');
+    });
+
+    Route::controller(PrecioProductoController::class)->group(function () {
+        Route::get('/precio-productos', 'index');
+        Route::get('/precio-producto/{precioProducto}/show', 'show');
+        Route::post('/precio-producto', 'store');
+        Route::post('/precio-producto/{precioProducto}/update', 'update');
+        Route::delete('/precio-producto/{precioProducto}/delete', 'destroy');
+        Route::post('/precio-producto/{precioProducto}/toggle', 'toggle');
     });
 
     Route::post('/logout', [LoginController::class, 'logout']);
