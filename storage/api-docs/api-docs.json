@@ -38,6 +38,16 @@
                             "type": "string",
                             "example": "ASC"
                         }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "description": "Filtrar por estado de la divisa",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "true"
+                        }
                     }
                 ],
                 "responses": {
@@ -117,11 +127,6 @@
                                         "type": "number",
                                         "format": "float",
                                         "example": "1.23456789"
-                                    },
-                                    "is_active": {
-                                        "description": "Estado de la divisa",
-                                        "type": "boolean",
-                                        "example": true
                                     }
                                 },
                                 "type": "object"
@@ -170,7 +175,7 @@
                 ]
             }
         },
-        "/api/divisa/{id}": {
+        "/api/divisa/{divisa}/show": {
             "get": {
                 "tags": [
                     "Divisas"
@@ -179,7 +184,7 @@
                 "operationId": "divisa_show",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "divisa",
                         "in": "path",
                         "required": true,
                         "schema": {
@@ -324,7 +329,7 @@
                 ]
             }
         },
-        "/api/divisa/{id}/delete": {
+        "/api/divisa/{divisa}/delete": {
             "delete": {
                 "tags": [
                     "Divisas"
@@ -333,7 +338,7 @@
                 "operationId": "divisa_destroy",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "divisa",
                         "in": "path",
                         "required": true,
                         "schema": {
@@ -370,7 +375,7 @@
                 ]
             }
         },
-        "/api/backoffice/v1/divisa/{divisa}/toggle": {
+        "/api/divisa/{divisa}/toggle": {
             "post": {
                 "tags": [
                     "Divisas"
@@ -579,6 +584,475 @@
                     }
                 ]
             }
+        },
+        "/api/productos": {
+            "get": {
+                "tags": [
+                    "Productos"
+                ],
+                "description": "Listado de productos",
+                "operationId": "producto_index",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Nombre de producto a buscar",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "test"
+                        }
+                    },
+                    {
+                        "name": "ordercreated",
+                        "in": "query",
+                        "description": "Ordenar fecha de Creación del producto",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "ASC"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "description": "Filtrar por estado de la divisa",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "true"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "Json",
+                                            "example": "[...]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "token": []
+                    }
+                ]
+            }
+        },
+        "/api/producto": {
+            "post": {
+                "tags": [
+                    "Productos"
+                ],
+                "description": "Crear un producto nuevo",
+                "operationId": "producto_store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nombre del producto",
+                                        "type": "string",
+                                        "example": "Laptop"
+                                    },
+                                    "description": {
+                                        "description": "Descripción del producto",
+                                        "type": "string",
+                                        "example": "Laptop de alta gama"
+                                    },
+                                    "price": {
+                                        "description": "Precio del producto",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "1500.00"
+                                    },
+                                    "divisa_id": {
+                                        "description": "ID de la divisa",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "tax_cost": {
+                                        "description": "Costo del impuesto",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "150.00"
+                                    },
+                                    "manufacturing_cost": {
+                                        "description": "Costo de fabricación",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "1000.00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Stored",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "Json",
+                                            "example": "[...]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "token": []
+                    }
+                ]
+            }
+        },
+        "/api/producto/{producto}/show": {
+            "get": {
+                "tags": [
+                    "Productos"
+                ],
+                "description": "Obtener un producto por ID",
+                "operationId": "producto_show",
+                "parameters": [
+                    {
+                        "name": "producto",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "Json",
+                                            "example": "[...]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "token": []
+                    }
+                ]
+            }
+        },
+        "/api/producto/{producto}/update": {
+            "post": {
+                "tags": [
+                    "Productos"
+                ],
+                "description": "Actualizar un producto",
+                "operationId": "producto_update",
+                "parameters": [
+                    {
+                        "name": "producto",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nombre de la divisa",
+                                        "type": "string",
+                                        "example": "dolar"
+                                    },
+                                    "description": {
+                                        "description": "Descripción del producto",
+                                        "type": "string",
+                                        "example": "Laptop de alta gama"
+                                    },
+                                    "price": {
+                                        "description": "Precio del producto",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "1500.00"
+                                    },
+                                    "divisa_id": {
+                                        "description": "ID de la divisa",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "tax_cost": {
+                                        "description": "Costo del impuesto",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "150.00"
+                                    },
+                                    "manufacturing_cost": {
+                                        "description": "Costo de fabricación",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "1000.00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "Json",
+                                            "example": "[...]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "token": []
+                    }
+                ]
+            }
+        },
+        "/api/producto/{producto}/delete": {
+            "delete": {
+                "tags": [
+                    "Productos"
+                ],
+                "description": "Eliminar un producto",
+                "operationId": "producto_destroy",
+                "parameters": [
+                    {
+                        "name": "producto",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful Deleted"
+                    },
+                    "401": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "token": []
+                    }
+                ]
+            }
+        },
+        "/api/producto/{producto}/toggle": {
+            "post": {
+                "tags": [
+                    "Productos"
+                ],
+                "description": "Activar o desactivar un producto",
+                "operationId": "producto_toggle",
+                "parameters": [
+                    {
+                        "name": "producto",
+                        "in": "path",
+                        "description": "producto Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "integer",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful Activated or Deactivated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "Json",
+                                            "example": "[...]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error recurso no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Recurso no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "token": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -605,6 +1079,10 @@
         {
             "name": "Login",
             "description": "Login"
+        },
+        {
+            "name": "Productos",
+            "description": "Productos"
         }
     ]
 }
