@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DivisaController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProductoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,9 +18,17 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/divisas', 'index');
         Route::get('/divisa/{divisa}/show', 'show');
         Route::post('/divisa', 'store');
-        Route::post('/divisa/{id}/update', 'update');
+        Route::post('/divisa/{divisa}/update', 'update');
         Route::delete('/divisa/{divisa}/delete', 'destroy');
         Route::post('/divisa/{divisa}/toggle', 'toggle');
+    });
+    Route::controller(ProductoController::class)->group(function () {
+        Route::get('/productos', 'index');
+        Route::get('/producto/{producto}/show', 'show');
+        Route::post('/producto', 'store');
+        Route::post('/producto/{producto}/update', 'update');
+        Route::delete('/producto/{producto}/delete', 'destroy');
+        Route::post('/producto/{producto}/toggle', 'toggle');
     });
 
     Route::post('/logout', [LoginController::class, 'logout']);

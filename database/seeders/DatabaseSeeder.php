@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Producto;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -25,6 +26,9 @@ class DatabaseSeeder extends Seeder
             DivisaSeeder::class,
         ]);
 
-        User::factory()->count(10)->create();
+        if (env('DATA_DUMMY') == 'true') {
+            User::factory()->count(10)->create();
+            Producto::factory()->count(20)->create();
+        }
     }
 }
