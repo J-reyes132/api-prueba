@@ -3,5 +3,9 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    if (!env('APP_DEBUG')) {
+        return response()->json(['status' => 'error', 'message' => 'No autorizado'], ResponseCodes::UNAUTHORIZED);
+    } else {
+        return redirect('api/documentation');
+    }
 });

@@ -19,5 +19,12 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        $this->call([
+            UserSeeder::class,
+            DivisaSeeder::class,
+        ]);
+
+        User::factory()->count(10)->create();
     }
 }
