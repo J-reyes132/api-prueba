@@ -6,6 +6,7 @@ use App\Exceptions\Handler;
 use App\Exceptions\SomethingWentWrong;
 use App\Http\Resources\DivisaResource;
 use App\Models\Divisa;
+use Http\Discovery\Exception\NotFoundException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -33,6 +34,13 @@ class DivisaController extends Controller
      *         required=false,
      *         @OA\Schema(type="string", example="ASC")
      *     ),
+     *      *     @OA\Parameter(
+     *         name="is_active",
+     *         in="query",
+     *         description="Filtrar por estado de la divisa",
+     *         required=false,
+     *         @OA\Schema(type="string", example="true")
+     *     ),
      * @OA\Response(
      *    response=200,
      *    description="Successful Response",
@@ -53,8 +61,8 @@ class DivisaController extends Controller
      {
         try{
             $divisas = Divisa::name($request->name)
-                ->orderCreated($request->ordercreated)
-                ->active($request->active)
+                ->orderCreatedBy($request->ordercreated)
+                ->active($request->is_active)
                 ->paginate(10);
             return DivisaResource::collection($divisas);
 
@@ -78,7 +86,6 @@ class DivisaController extends Controller
      *                  @OA\Property(property="code", type="string", description="Código de la divisa", example="USD"),
      *                  @OA\Property(property="symbol", type="string", description="Simbolo de la divisa", example="$"),
      *                  @OA\Property(property="exchange_rate", type="number", format="float", description="Tasa de cambio de la divisa", example="1.23456789"),
-     *                  @OA\Property(property="is_active", type="boolean", description="Estado de la divisa", example=true),
      *       ),
      *      ),
      *   ),
@@ -110,7 +117,6 @@ class DivisaController extends Controller
             $divisa->code = $request->code ?? strtoupper($request->name);
             $divisa->symbol = $request->symbol;
             $divisa->exchange_rate = $request->exchange_rate ?? 0.00000000;
-            $divisa->is_active = $request->is_active;
             $divisa->save();
 
             return new DivisaResource($divisa);
@@ -122,12 +128,12 @@ class DivisaController extends Controller
     /**
      * @OA\Get(
      *     tags={"Divisas"},
-     *     path="/api/divisa/{id}",
+     *     path="/api/divisa/{divisa}/show",
      *     description="Obtener una divisa por ID",
      *     security={{"token": {}}},
      *     operationId="divisa_show",
      * @OA\Parameter(
-     *         name="id",
+     *         name="divisa",
      *         in="path",
      *         required=true,
      *         @OA\Schema(type="integer", example=1)
@@ -152,7 +158,7 @@ class DivisaController extends Controller
         try {
             return new DivisaResource($divisa);
         } catch (ModelNotFoundException $e) {
-            Handler::error();
+             return $this->errorResponse('Recurso no encontrado', ResponseCodes::NOT_FOUND, ['error' => $e->getMessage()]);
         }
     }
 
@@ -208,8 +214,7 @@ class DivisaController extends Controller
             $divisa->code = $request->code ?? strtoupper($request->name);
             $divisa->symbol = $request->symbol;
             $divisa->exchange_rate = $request->exchange_rate ?? 0.00000000;
-            $divisa->is_active = $request->is_active;
-            $divisa->save();
+            $divisa->update();
 
             return new DivisaResource($divisa);
         } catch (ModelNotFoundException $e) {
@@ -220,12 +225,12 @@ class DivisaController extends Controller
     /**
      * @OA\Delete(
      *     tags={"Divisas"},
-     *     path="/api/divisa/{id}/delete",
+     *     path="/api/divisa/{divisa}/delete",
      *     description="Eliminar una divisa",
      *     security={{"token": {}}},
      *     operationId="divisa_destroy",
      * @OA\Parameter(
-     *         name="id",
+     *         name="divisa",
      *         in="path",
      *         required=true,
      *         @OA\Schema(type="integer", example=1)
@@ -252,14 +257,14 @@ class DivisaController extends Controller
             $divisa->delete();
             return Handler::successDelete();
         } catch (ModelNotFoundException $e) {
-            return Handler::error();
+             return $this->errorResponse('Recurso no encontrado', ResponseCodes::NOT_FOUND, ['error' => $e->getMessage()]);
         }
     }
 
  /**
      * @OA\Post(
      *     tags={"Divisas"},
-     *     path="/api/backoffice/v1/divisa/{divisa}/toggle",
+     *     path="/api/divisa/{divisa}/toggle",
      *     description="Activar o desactivar una divisa",
      *     security={{"token": {}}},
      *     operationId="divisa_toggle",
@@ -302,10 +307,9 @@ class DivisaController extends Controller
         try {
             $divisa->is_active = !$divisa->is_active;
             $divisa->save();
-
             return new DivisaResource($divisa);
-        } catch (\Throwable $th) {
-            throw new SomethingWentWrong($th);
+        } catch (NotFoundException $e) {
+           return $this->errorResponse('Recurso no encontrado', ResponseCodes::NOT_FOUND, ['error' => $e->getMessage()]);
         }
     }
 }

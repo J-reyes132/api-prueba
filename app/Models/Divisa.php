@@ -31,4 +31,19 @@ class Divisa extends Model
         return $query;
 
     }
+
+    public function scopename($query, $name)
+    {
+        if(!empty($name)){
+            return $query->where('name', 'like', "%{$name}%");
+        }
+        return $query;
+    }
+
+    public function scopeOrderCreatedBy($query, $orderby){
+        if(!empty($orderby)){
+            return $query->orderby('created_at', $orderby);
+        }
+    }
+
 }
