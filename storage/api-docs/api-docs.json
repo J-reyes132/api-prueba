@@ -585,6 +585,445 @@
                 ]
             }
         },
+        "/api/precio-productos": {
+            "get": {
+                "tags": [
+                    "Precio Productos"
+                ],
+                "description": "Listado de precios de productos",
+                "operationId": "precio_producto_index",
+                "parameters": [
+                    {
+                        "name": "producto_id",
+                        "in": "query",
+                        "description": "ID del producto a buscar",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "ordercreated",
+                        "in": "query",
+                        "description": "Ordenar fecha de Creación del precio del producto",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "ASC"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "description": "Filtrar por estado del precio del producto",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "true"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "Json",
+                                            "example": "[...]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "token": []
+                    }
+                ]
+            }
+        },
+        "/api/precio-producto": {
+            "post": {
+                "tags": [
+                    "Precio Productos"
+                ],
+                "description": "Crear un precio de producto nuevo",
+                "operationId": "precio_producto_store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "producto_id",
+                                    "divisa_id",
+                                    "precio"
+                                ],
+                                "properties": {
+                                    "producto_id": {
+                                        "description": "ID del producto",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "divisa_id": {
+                                        "description": "ID de la divisa",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "precio": {
+                                        "description": "Precio del producto",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "1500.00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Stored",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "Json",
+                                            "example": "[...]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "token": []
+                    }
+                ]
+            }
+        },
+        "/api/precio-producto/{precioProducto}/show": {
+            "get": {
+                "tags": [
+                    "Precio Productos"
+                ],
+                "description": "Obtener un precio de producto por ID",
+                "operationId": "precio_producto_show",
+                "parameters": [
+                    {
+                        "name": "precioProducto",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "Json",
+                                            "example": "[...]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "token": []
+                    }
+                ]
+            }
+        },
+        "/api/precio-producto/{precioProducto}/update": {
+            "post": {
+                "tags": [
+                    "Precio Productos"
+                ],
+                "description": "Actualizar un precio de producto",
+                "operationId": "precio_producto_update",
+                "parameters": [
+                    {
+                        "name": "precioProducto",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "producto_id",
+                                    "divisa_id",
+                                    "precio"
+                                ],
+                                "properties": {
+                                    "producto_id": {
+                                        "description": "ID del producto",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "divisa_id": {
+                                        "description": "ID de la divisa",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "precio": {
+                                        "description": "Precio del producto",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "1500.00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "Json",
+                                            "example": "[...]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "token": []
+                    }
+                ]
+            }
+        },
+        "/api/precio-producto/{precioProducto}/delete": {
+            "delete": {
+                "tags": [
+                    "Precio Productos"
+                ],
+                "description": "Eliminar un precio de producto",
+                "operationId": "precio_producto_destroy",
+                "parameters": [
+                    {
+                        "name": "precioProducto",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful Deleted"
+                    },
+                    "401": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "token": []
+                    }
+                ]
+            }
+        },
+        "/api/precio-producto/{precioProducto}/toggle": {
+            "post": {
+                "tags": [
+                    "Precio Productos"
+                ],
+                "description": "Activar o desactivar un precio de producto",
+                "operationId": "precio_producto_toggle",
+                "parameters": [
+                    {
+                        "name": "precioProducto",
+                        "in": "path",
+                        "description": "precio Producto Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "integer",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful Activated or Deactivated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "Json",
+                                            "example": "[...]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error recurso no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Recurso no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "token": []
+                    }
+                ]
+            }
+        },
         "/api/productos": {
             "get": {
                 "tags": [
@@ -616,7 +1055,7 @@
                     {
                         "name": "is_active",
                         "in": "query",
-                        "description": "Filtrar por estado de la divisa",
+                        "description": "Filtrar por estado del producto",
                         "required": false,
                         "schema": {
                             "type": "string",
@@ -1079,6 +1518,10 @@
         {
             "name": "Login",
             "description": "Login"
+        },
+        {
+            "name": "Precio Productos",
+            "description": "Precio Productos"
         },
         {
             "name": "Productos",
